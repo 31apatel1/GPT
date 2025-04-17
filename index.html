@@ -13,99 +13,107 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #2D2D2D;
-            color: #fff;
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 0;
             flex-direction: column;
         }
 
         .chat-container {
-            width: 100%;
-            height: 100%;
+            width: 95%;
+            max-width: 900px;
+            height: 80%;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #1A1A1D, #4E4E50);
-            border-radius: 15px;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: background-color 0.5s ease, color 0.5s ease;
+            position: relative;
         }
 
         .header {
-            background-color: #00B0FF;
-            color: #fff;
+            background-color: #0078D4;
+            color: #ffffff;
             text-align: center;
-            padding: 30px 0;
-            font-size: 2.5em;
-            font-weight: bold;
-            border-bottom: 3px solid #007ACC;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: 600;
+            border-bottom: 2px solid #005A9C;
         }
 
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 30px;
-            background-color: #222;
-            border-radius: 12px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 15px;
             margin: 20px;
-            font-size: 1.3em;
-            line-height: 1.6;
+            font-size: 1.2em;
+            line-height: 1.5;
         }
 
         .input-container {
             display: flex;
-            padding: 20px;
-            background-color: #333;
+            padding: 15px;
+            background-color: #0078D4;
             border-radius: 12px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            justify-content: space-between;
         }
 
         .input-container input {
             flex: 1;
-            padding: 20px;
-            font-size: 1.3em;
+            padding: 15px;
+            font-size: 1.2em;
             border-radius: 10px;
             border: none;
             outline: none;
             margin-right: 20px;
-            background-color: #444;
-            color: white;
+            background-color: #e6f2ff;
+            color: #333;
         }
 
         .input-container button {
-            background-color: #00B0FF;
-            color: white;
+            background-color: #ffffff;
+            color: #0078D4;
             border: none;
             border-radius: 10px;
-            padding: 20px 25px;
+            padding: 15px 25px;
             cursor: pointer;
-            font-size: 1.3em;
+            font-size: 1.2em;
             transition: background-color 0.3s ease;
         }
 
         .input-container button:hover {
-            background-color: #007ACC;
+            background-color: #e6f2ff;
         }
 
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             padding: 20px;
             border-radius: 12px;
-            background-color: #333;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            max-width: 80%;
+            background-color: #f1f1f1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 70%;
         }
 
         .message.bot {
-            background-color: #4A4A4A;
+            background-color: #e6e6e6;
             margin-left: auto;
         }
 
         .message.user {
-            background-color: #0066FF;
+            background-color: #0078D4;
+            color: white;
             margin-right: auto;
         }
 
@@ -113,14 +121,14 @@
             font-style: italic;
             color: #777;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
         .settings-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #007ACC;
+            top: 20px;
+            right: 20px;
+            background-color: #0078D4;
             color: white;
             border: none;
             border-radius: 50%;
@@ -132,7 +140,7 @@
         }
 
         .settings-btn:hover {
-            background-color: #00B0FF;
+            background-color: #005A9C;
         }
 
         .popup {
@@ -141,18 +149,19 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #444;
+            background-color: #ffffff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            width: 300px;
+            width: 350px;
+            transition: opacity 0.3s ease;
         }
 
         .popup .popup-header {
             text-align: center;
-            color: white;
-            font-size: 1.5em;
+            color: #0078D4;
+            font-size: 1.6em;
             margin-bottom: 20px;
         }
 
@@ -162,8 +171,8 @@
         }
 
         .popup .popup-content label {
-            color: white;
-            font-size: 1.2em;
+            color: #555;
+            font-size: 1.1em;
             margin-bottom: 10px;
         }
 
@@ -173,27 +182,27 @@
             margin-bottom: 20px;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .popup .popup-footer {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            justify-content: space-evenly;
         }
 
         .popup .popup-footer button {
-            background-color: #00B0FF;
+            background-color: #0078D4;
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 10px 20px;
-            font-size: 1.1em;
+            padding: 12px 20px;
+            font-size: 1.2em;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .popup .popup-footer button:hover {
-            background-color: #007ACC;
+            background-color: #005A9C;
         }
 
         /* Overlay (Background when popup is open) */
@@ -204,7 +213,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
     </style>
@@ -231,13 +240,13 @@
         <div class="popup-header">Customize Colors</div>
         <div class="popup-content">
             <label for="bgColor">Background:</label>
-            <input type="color" id="bgColor" value="#2D2D2D">
+            <input type="color" id="bgColor" value="#ffffff">
 
             <label for="textColor">Text:</label>
-            <input type="color" id="textColor" value="#ffffff">
+            <input type="color" id="textColor" value="#333333">
 
             <label for="buttonColor">Button:</label>
-            <input type="color" id="buttonColor" value="#00B0FF">
+            <input type="color" id="buttonColor" value="#0078D4">
         </div>
         <div class="popup-footer">
             <button onclick="applyChanges()">Apply</button>
@@ -300,51 +309,4 @@
 
                 const data = await response.json();
                 const botReply = data.choices[0].text.trim();
-                addMessage(botReply, 'bot');
-
-                // Remove typing indicator after receiving response
-                messagesContainer.removeChild(typingIndicator);
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage("Sorry, there was an error. Please try again later.", 'bot');
-
-                // Remove typing indicator after error
-                messagesContainer.removeChild(typingIndicator);
-            }
-        }
-
-        // Function to change the color scheme dynamically
-        function applyChanges() {
-            const bgColor = document.getElementById('bgColor').value;
-            const textColor = document.getElementById('textColor').value;
-            const buttonColor = document.getElementById('buttonColor').value;
-
-            // Change the background color of the chat container and header
-            document.querySelector('.chat-container').style.backgroundColor = bgColor;
-            document.querySelector('.header').style.backgroundColor = buttonColor;
-
-            // Change the text color
-            document.querySelector('.header').style.color = textColor;
-            document.querySelector('.messages').style.color = textColor;
-
-            // Change the input and button colors
-            document.querySelector('.input-container input').style.backgroundColor = bgColor;
-            document.querySelector('.input-container button').style.backgroundColor = buttonColor;
-
-            closeSettings(); // Close the popup after applying changes
-        }
-
-        // Function to open settings pop-up
-        function openSettings() {
-            settingsPopup.style.display = 'block';
-            overlay.style.display = 'block';
-        }
-
-        // Function to close settings pop-up
-        function closeSettings() {
-            settingsPopup.style.display = 'none';
-            overlay.style.display = 'none';
-        }
-    </script>
-</body>
-</html>
+                addMessage(botReply, 'bot
