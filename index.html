@@ -6,12 +6,12 @@
   <title>Aayan's GPT</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Inter&family=Courier+Prime&family=Merriweather&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Merriweather&family=Courier+Prime&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Inter', sans-serif;
       background-color: #0e0e0e;
       color: #fff;
     }
@@ -27,7 +27,6 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       position: relative;
       overflow: hidden;
-      font-family: 'Roboto', sans-serif;
     }
 
     .header {
@@ -136,7 +135,7 @@
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.5);
       z-index: 999;
-      width: 320px;
+      width: 300px;
       color: #fff;
     }
 
@@ -149,16 +148,14 @@
       margin-bottom: 10px;
     }
 
-    .popup input[type="color"],
-    .popup select {
+    .popup input[type="color"], .popup select {
       width: 100%;
       height: 40px;
       margin-bottom: 20px;
-      border: none;
-      background: #111;
-      color: #fff;
-      padding: 5px;
       border-radius: 8px;
+      padding: 5px;
+      border: none;
+      font-size: 1rem;
     }
 
     .popup button {
@@ -168,6 +165,7 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 1rem;
     }
 
     .popup .apply-btn {
@@ -182,10 +180,11 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="chat-container" id="chatContainer">
-    <div class="header" id="chatHeader">Aayan's GPT</div>
+    <div class="header">Aayan's GPT</div>
     <div class="messages" id="messages"></div>
     <div class="input-container">
       <input type="text" id="userInput" placeholder="Type your message...">
@@ -193,14 +192,11 @@
     </div>
   </div>
 
-  <!-- Settings Button -->
   <button class="settings-btn" onclick="openSettings()">⚙️</button>
 
-  <!-- Overlay and Settings Popup -->
   <div class="overlay" id="overlay" onclick="closeSettings()"></div>
-
   <div class="popup" id="popup">
-    <h3>Customize Chat</h3>
+    <h3>Customize Appearance</h3>
 
     <label for="bgColor">Background Color:</label>
     <input type="color" id="bgColor" value="#1a1a1a">
@@ -213,8 +209,8 @@
 
     <label for="fontSelect">Font Style:</label>
     <select id="fontSelect">
-      <option value="'Roboto', sans-serif">Roboto</option>
       <option value="'Inter', sans-serif">Inter</option>
+      <option value="'Roboto', sans-serif">Roboto</option>
       <option value="'Courier Prime', monospace">Courier Prime</option>
       <option value="'Merriweather', serif">Merriweather</option>
       <option value="Arial, sans-serif">Arial</option>
@@ -228,6 +224,7 @@
   </div>
 
   <script>
+    const API_KEY = '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';
     const messagesDiv = document.getElementById('messages');
 
     function sendMessage() {
@@ -238,10 +235,37 @@
       addMessage(text, 'user');
       input.value = '';
 
-      // Simulated bot reply
-      setTimeout(() => {
-        addMessage("Aayan's GPT says: " + text, 'bot');
-      }, 600);
+      const loading = document.createElement('div');
+      loading.classList.add('message', 'bot');
+      loading.textContent = "Aayan's GPT is thinking...";
+      messagesDiv.appendChild(loading);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'user', content: text }
+          ]
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        loading.remove();
+        const reply = data.choices[0].message.content.trim();
+        addMessage(reply, 'bot');
+      })
+      .catch(err => {
+        loading.remove();
+        addMessage("⚠️ Error: Unable to connect to ChatGPT. Check your API key.", 'bot');
+        console.error(err);
+      });
     }
 
     function addMessage(msg, sender) {
@@ -253,34 +277,4 @@
     }
 
     function openSettings() {
-      document.getElementById('popup').classList.add('active');
-      document.getElementById('overlay').classList.add('active');
-    }
-
-    function closeSettings() {
-      document.getElementById('popup').classList.remove('active');
-      document.getElementById('overlay').classList.remove('active');
-    }
-
-    function applyChanges() {
-      const bgColor = document.getElementById('bgColor').value;
-      const textColor = document.getElementById('textColor').value;
-      const buttonColor = document.getElementById('buttonColor').value;
-      const fontFamily = document.getElementById('fontSelect').value;
-
-      const chatContainer = document.getElementById('chatContainer');
-      chatContainer.style.backgroundColor = bgColor;
-      chatContainer.style.color = textColor;
-      chatContainer.style.fontFamily = fontFamily;
-
-      document.querySelector('.messages').style.color = textColor;
-      document.querySelector('.input-container button').style.backgroundColor = buttonColor;
-      document.querySelector('.input-container').style.fontFamily = fontFamily;
-      document.getElementById('chatHeader').style.fontFamily = fontFamily;
-
-      closeSettings();
-    }
-  </script>
-
-</body>
-</html>
+      document.getElementBy
