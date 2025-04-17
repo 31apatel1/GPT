@@ -160,7 +160,9 @@
     const themeSelect = document.getElementById('theme');
     const fontSelect = document.getElementById('font');
 
-    const BACKEND_URL = 'https://your-replit-username.repl.co/chat'; // Replace with your real backend URL
+    // ✅ Replace the Placeholder BACKEND_URL:
+    // Update this with your actual backend API endpoint.
+    const BACKEND_URL = 'https://your-backend-api-url.com/chat';
 
     sendBtn.addEventListener('click', sendMessage);
     userInput.addEventListener('keypress', function (e) {
@@ -187,10 +189,7 @@
     });
 
     fontSelect.addEventListener('change', () => {
-      document.documentElement.style.setProperty(
-        '--font-family',
-        fontSelect.value
-      );
+      document.documentElement.style.setProperty('--font-family', fontSelect.value);
     });
 
     function addMessage(sender, text) {
@@ -208,18 +207,25 @@
       addMessage('user', message);
       userInput.value = '';
 
+      // ✅ Test the Backend Connection:
+      console.log(`Sending message to: ${BACKEND_URL}`);
+
       fetch(BACKEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message })
       })
-        .then(res => res.json())
-        .then(data => {
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status} - ${data.error || 'Unknown error'}`);
+          }
           addMessage('bot', data.reply || '⚠️ No response from server.');
         })
         .catch(err => {
-          console.error(err);
-          addMessage('bot', '❌ Error connecting to server.');
+          // ✅ Enhanced Error Handling:
+          console.error('Fetch error:', err);
+          addMessage('bot', `❌ Server Error: ${err.message}`);
         });
     }
   </script>
