@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #2D2D2D;
@@ -21,6 +22,7 @@
             margin: 0;
             flex-direction: column;
         }
+
         .chat-container {
             width: 100%;
             height: 100%;
@@ -30,7 +32,9 @@
             border-radius: 15px;
             box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
+
         .header {
             background-color: #00B0FF;
             color: #fff;
@@ -40,6 +44,7 @@
             font-weight: bold;
             border-bottom: 3px solid #007ACC;
         }
+
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -50,12 +55,14 @@
             font-size: 1.3em;
             line-height: 1.6;
         }
+
         .input-container {
             display: flex;
             padding: 20px;
             background-color: #333;
             border-radius: 12px;
         }
+
         .input-container input {
             flex: 1;
             padding: 20px;
@@ -67,6 +74,7 @@
             background-color: #444;
             color: white;
         }
+
         .input-container button {
             background-color: #00B0FF;
             color: white;
@@ -77,9 +85,11 @@
             font-size: 1.3em;
             transition: background-color 0.3s ease;
         }
+
         .input-container button:hover {
             background-color: #007ACC;
         }
+
         .message {
             margin-bottom: 15px;
             padding: 20px;
@@ -88,33 +98,114 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             max-width: 80%;
         }
+
         .message.bot {
             background-color: #4A4A4A;
             margin-left: auto;
         }
+
         .message.user {
             background-color: #0066FF;
             margin-right: auto;
         }
+
         .typing-indicator {
             font-style: italic;
             color: #777;
             text-align: center;
             font-size: 1.2em;
         }
-        .settings {
-            display: flex;
-            justify-content: space-evenly;
-            width: 100%;
-            padding: 20px;
-        }
-        .settings div {
+
+        .settings-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #007ACC;
             color: white;
-            font-size: 1.1em;
+            border: none;
+            border-radius: 50%;
+            padding: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
         }
-        .settings input[type="color"] {
+
+        .settings-btn:hover {
+            background-color: #00B0FF;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #444;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 300px;
+        }
+
+        .popup .popup-header {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .popup .popup-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popup .popup-content label {
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .popup .popup-content input[type="color"] {
             height: 40px;
             width: 100px;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .popup .popup-footer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .popup .popup-footer button {
+            background-color: #00B0FF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup .popup-footer button:hover {
+            background-color: #007ACC;
+        }
+
+        /* Overlay (Background when popup is open) */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 999;
         }
     </style>
 </head>
@@ -129,24 +220,36 @@
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
-    <div class="settings">
-        <div>
+
+    <button class="settings-btn" onclick="openSettings()">⚙️</button>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeSettings()"></div>
+
+    <!-- Pop-up Settings -->
+    <div class="popup" id="settingsPopup">
+        <div class="popup-header">Customize Colors</div>
+        <div class="popup-content">
             <label for="bgColor">Background:</label>
-            <input type="color" id="bgColor" value="#2D2D2D" onchange="changeColor()">
-        </div>
-        <div>
+            <input type="color" id="bgColor" value="#2D2D2D">
+
             <label for="textColor">Text:</label>
-            <input type="color" id="textColor" value="#ffffff" onchange="changeColor()">
-        </div>
-        <div>
+            <input type="color" id="textColor" value="#ffffff">
+
             <label for="buttonColor">Button:</label>
-            <input type="color" id="buttonColor" value="#00B0FF" onchange="changeColor()">
+            <input type="color" id="buttonColor" value="#00B0FF">
+        </div>
+        <div class="popup-footer">
+            <button onclick="applyChanges()">Apply</button>
+            <button onclick="closeSettings()">Cancel</button>
         </div>
     </div>
 
     <script>
         const API_KEY = 'YOUR_OPENAI_API_KEY'; // Replace with your OpenAI API key
         const messagesContainer = document.getElementById('messages');
+        const settingsPopup = document.getElementById('settingsPopup');
+        const overlay = document.getElementById('overlay');
 
         // Function to add a message to the chat container
         function addMessage(text, sender) {
@@ -211,7 +314,7 @@
         }
 
         // Function to change the color scheme dynamically
-        function changeColor() {
+        function applyChanges() {
             const bgColor = document.getElementById('bgColor').value;
             const textColor = document.getElementById('textColor').value;
             const buttonColor = document.getElementById('buttonColor').value;
@@ -227,6 +330,20 @@
             // Change the input and button colors
             document.querySelector('.input-container input').style.backgroundColor = bgColor;
             document.querySelector('.input-container button').style.backgroundColor = buttonColor;
+
+            closeSettings(); // Close the popup after applying changes
+        }
+
+        // Function to open settings pop-up
+        function openSettings() {
+            settingsPopup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Function to close settings pop-up
+        function closeSettings() {
+            settingsPopup.style.display = 'none';
+            overlay.style.display = 'none';
         }
     </script>
 </body>
