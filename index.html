@@ -277,4 +277,33 @@
     }
 
     function openSettings() {
-      document.getElementBy
+      document.getElementById('popup').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
+
+    function closeSettings() {
+      document.getElementById('popup').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+    }
+
+    function applyChanges() {
+      const bgColor = document.getElementById('bgColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const buttonColor = document.getElementById('buttonColor').value;
+      const fontStyle = document.getElementById('fontSelect').value;
+
+      document.body.style.backgroundColor = bgColor;
+      document.body.style.color = textColor;
+      document.getElementById('chatContainer').style.backgroundColor = bgColor;
+      document.getElementById('userInput').style.backgroundColor = bgColor;
+      document.getElementById('userInput').style.color = textColor;
+      document.querySelector('.settings-btn').style.backgroundColor = buttonColor;
+
+      document.body.style.fontFamily = fontStyle;
+
+      closeSettings();
+    }
+  </script>
+
+</body>
+</html>
