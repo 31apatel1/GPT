@@ -9,11 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Merriweather&family=Courier+Prime&display=swap" rel="stylesheet">
 
   <style>
+    /* Global Styles */
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
+      background-color: #2a2a2a; /* Dark background */
+      color: #eaeaea; /* Light grey text */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,11 +23,11 @@
 
     .chat-container {
       width: 100%;
-      max-width: 700px;
+      max-width: 800px;
       height: 80vh;
-      background-color: #fff;
+      background-color: #333333; /* Dark grey background */
       border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -34,13 +35,13 @@
     }
 
     .header {
-      background-color: #007bff;
+      background-color: #1c1c1c; /* Darker grey */
       color: #fff;
       padding: 20px;
       text-align: center;
       font-size: 1.8rem;
       font-weight: bold;
-      border-bottom: 2px solid #0056b3;
+      border-bottom: 2px solid #444444; /* Slightly lighter border */
     }
 
     .messages {
@@ -50,9 +51,7 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      background-color: #fafafa;
-      border-bottom: 1px solid #ddd;
-      transition: background-color 0.3s ease;
+      background-color: #444444; /* Medium dark grey */
     }
 
     .message {
@@ -63,13 +62,13 @@
     }
 
     .user {
-      background-color: #e4e6ea;
-      color: #333;
+      background-color: #555555; /* Dark grey for user */
+      color: #eaeaea;
       align-self: flex-start;
     }
 
     .bot {
-      background-color: #007bff;
+      background-color: #007bff; /* Chatbot blue */
       color: white;
       align-self: flex-end;
     }
@@ -77,18 +76,24 @@
     .input-container {
       display: flex;
       padding: 15px;
-      background-color: #fff;
-      border-top: 1px solid #ddd;
+      background-color: #333333;
+      border-top: 1px solid #444444;
     }
 
     .input-container input {
       flex: 1;
       padding: 12px;
       font-size: 1rem;
-      border: 1px solid #ddd;
-      background-color: #f0f0f0;
-      color: #333;
+      border: 1px solid #444444;
+      background-color: #555555;
+      color: #eaeaea;
       border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-container input:focus {
+      background-color: #666666;
+      outline: none;
     }
 
     .input-container button {
@@ -103,7 +108,7 @@
     }
 
     .input-container button:hover {
-      background-color: #0056b3;
+      background-color: #0056b3; /* Darker blue */
     }
 
     .settings-btn {
@@ -125,6 +130,7 @@
       background-color: #0056b3;
     }
 
+    /* Settings Popup */
     .popup, .overlay {
       display: none;
     }
@@ -148,13 +154,14 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #fff;
+      background: #333333;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       z-index: 1000;
       width: 350px;
       text-align: center;
+      color: #eaeaea;
     }
 
     .popup h3 {
@@ -173,8 +180,10 @@
       padding: 12px;
       margin-bottom: 20px;
       border-radius: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid #444444;
       font-size: 1rem;
+      background-color: #555555;
+      color: #eaeaea;
     }
 
     .popup button {
@@ -194,9 +203,8 @@
     }
 
     .popup .cancel-btn {
-      background-color: #ddd;
-      color: black;
-      float: right;
+      background-color: #555555;
+      color: white;
     }
 
     .popup .apply-btn:hover {
@@ -204,7 +212,7 @@
     }
 
     .popup .cancel-btn:hover {
-      background-color: #bbb;
+      background-color: #444444;
     }
   </style>
 </head>
@@ -227,10 +235,10 @@
     <h3>Customize Appearance</h3>
 
     <label for="bgColor">Background Color:</label>
-    <input type="color" id="bgColor" value="#ffffff">
+    <input type="color" id="bgColor" value="#333333">
 
     <label for="textColor">Text Color:</label>
-    <input type="color" id="textColor" value="#333333">
+    <input type="color" id="textColor" value="#eaeaea">
 
     <label for="buttonColor">Button Color:</label>
     <input type="color" id="buttonColor" value="#007bff">
@@ -241,7 +249,6 @@
       <option value="'Roboto', sans-serif">Roboto</option>
       <option value="'Courier Prime', monospace">Courier Prime</option>
       <option value="'Merriweather', serif">Merriweather</option>
-      <option value="Arial, sans-serif">Arial</option>
     </select>
 
     <div style="display: flex; justify-content: space-between;">
@@ -296,4 +303,33 @@
     }
 
     function openSettings() {
-      document
+      document.getElementById('popup').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
+
+    function closeSettings() {
+      document.getElementById('popup').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+    }
+
+    function applyChanges() {
+      const bgColor = document.getElementById('bgColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const buttonColor = document.getElementById('buttonColor').value;
+      const fontStyle = document.getElementById('fontSelect').value;
+
+      document.body.style.backgroundColor = bgColor;
+      document.body.style.color = textColor;
+      document.getElementById('chatContainer').style.backgroundColor = bgColor;
+      document.getElementById('userInput').style.backgroundColor = bgColor;
+      document.getElementById('userInput').style.color = textColor;
+      document.querySelector('.settings-btn').style.backgroundColor = buttonColor;
+
+      document.body.style.fontFamily = fontStyle;
+
+      closeSettings();
+    }
+  </script>
+
+</body>
+</html>
