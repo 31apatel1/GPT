@@ -9,7 +9,203 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Merriweather&family=Courier+Prime&display=swap" rel="stylesheet">
 
   <style>
-    /* Your previous styles go here */
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 700px;
+      height: 80vh;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
+    }
+
+    .header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      border-bottom: 2px solid #0056b3;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background-color: #fafafa;
+      border-bottom: 1px solid #ddd;
+      transition: background-color 0.3s ease;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .user {
+      background-color: #e4e6ea;
+      color: #333;
+      align-self: flex-start;
+    }
+
+    .bot {
+      background-color: #007bff;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .input-container {
+      display: flex;
+      padding: 15px;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      background-color: #f0f0f0;
+      color: #333;
+      border-radius: 8px;
+    }
+
+    .input-container button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .settings-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    .settings-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .popup, .overlay {
+      display: none;
+    }
+
+    .popup.active, .overlay.active {
+      display: block;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      width: 350px;
+      text-align: center;
+    }
+
+    .popup h3 {
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+
+    .popup label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .popup input[type="color"], .popup select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+    }
+
+    .popup button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 45%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .popup .apply-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .popup .cancel-btn {
+      background-color: #ddd;
+      color: black;
+      float: right;
+    }
+
+    .popup .apply-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .popup .cancel-btn:hover {
+      background-color: #bbb;
+    }
   </style>
 </head>
 
@@ -28,7 +224,30 @@
 
   <div class="overlay" id="overlay" onclick="closeSettings()"></div>
   <div class="popup" id="popup">
-    <!-- Your popup settings code here -->
+    <h3>Customize Appearance</h3>
+
+    <label for="bgColor">Background Color:</label>
+    <input type="color" id="bgColor" value="#ffffff">
+
+    <label for="textColor">Text Color:</label>
+    <input type="color" id="textColor" value="#333333">
+
+    <label for="buttonColor">Button Color:</label>
+    <input type="color" id="buttonColor" value="#007bff">
+
+    <label for="fontSelect">Font Style:</label>
+    <select id="fontSelect">
+      <option value="'Inter', sans-serif">Inter</option>
+      <option value="'Roboto', sans-serif">Roboto</option>
+      <option value="'Courier Prime', monospace">Courier Prime</option>
+      <option value="'Merriweather', serif">Merriweather</option>
+      <option value="Arial, sans-serif">Arial</option>
+    </select>
+
+    <div style="display: flex; justify-content: space-between;">
+      <button class="apply-btn" onclick="applyChanges()">Apply</button>
+      <button class="cancel-btn" onclick="closeSettings()">Cancel</button>
+    </div>
   </div>
 
   <script>
@@ -77,33 +296,4 @@
     }
 
     function openSettings() {
-      document.getElementById('popup').classList.add('active');
-      document.getElementById('overlay').classList.add('active');
-    }
-
-    function closeSettings() {
-      document.getElementById('popup').classList.remove('active');
-      document.getElementById('overlay').classList.remove('active');
-    }
-
-    function applyChanges() {
-      const bgColor = document.getElementById('bgColor').value;
-      const textColor = document.getElementById('textColor').value;
-      const buttonColor = document.getElementById('buttonColor').value;
-      const fontStyle = document.getElementById('fontSelect').value;
-
-      document.body.style.backgroundColor = bgColor;
-      document.body.style.color = textColor;
-      document.getElementById('chatContainer').style.backgroundColor = bgColor;
-      document.getElementById('userInput').style.backgroundColor = bgColor;
-      document.getElementById('userInput').style.color = textColor;
-      document.querySelector('.settings-btn').style.backgroundColor = buttonColor;
-
-      document.body.style.fontFamily = fontStyle;
-
-      closeSettings();
-    }
-  </script>
-
-</body>
-</html>
+      document
