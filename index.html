@@ -1,312 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aayan's GPT Chatbot</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aayan's GPT</title>
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            flex-direction: column;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Inter&family=Courier+Prime&family=Merriweather&display=swap" rel="stylesheet">
 
-        .chat-container {
-            width: 95%;
-            max-width: 900px;
-            height: 80%;
-            display: flex;
-            flex-direction: column;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            position: relative;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #0e0e0e;
+      color: #fff;
+    }
 
-        .header {
-            background-color: #0078D4;
-            color: #ffffff;
-            text-align: center;
-            padding: 20px;
-            font-size: 2em;
-            font-weight: 600;
-            border-bottom: 2px solid #005A9C;
-        }
+    .chat-container {
+      max-width: 800px;
+      margin: 60px auto;
+      height: 90vh;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+    }
 
-        .messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 15px;
-            margin: 20px;
-            font-size: 1.2em;
-            line-height: 1.5;
-        }
+    .header {
+      background: #222;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+    }
 
-        .input-container {
-            display: flex;
-            padding: 15px;
-            background-color: #0078D4;
-            border-radius: 12px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            left: 0;
-            justify-content: space-between;
-        }
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #121212;
+    }
 
-        .input-container input {
-            flex: 1;
-            padding: 15px;
-            font-size: 1.2em;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            margin-right: 20px;
-            background-color: #e6f2ff;
-            color: #333;
-        }
+    .message {
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
 
-        .input-container button {
-            background-color: #ffffff;
-            color: #0078D4;
-            border: none;
-            border-radius: 10px;
-            padding: 15px 25px;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: background-color 0.3s ease;
-        }
+    .user {
+      background: #2e2e2e;
+      color: #fff;
+      align-self: flex-start;
+    }
 
-        .input-container button:hover {
-            background-color: #e6f2ff;
-        }
+    .bot {
+      background: #444;
+      color: #ddd;
+      align-self: flex-end;
+    }
 
-        .message {
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 12px;
-            background-color: #f1f1f1;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 70%;
-        }
+    .input-container {
+      display: flex;
+      padding: 15px;
+      background-color: #1c1c1c;
+      border-top: 1px solid #333;
+    }
 
-        .message.bot {
-            background-color: #e6e6e6;
-            margin-left: auto;
-        }
+    .input-container input {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #444;
+      background-color: #222;
+      color: #fff;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
 
-        .message.user {
-            background-color: #0078D4;
-            color: white;
-            margin-right: auto;
-        }
+    .input-container button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        .typing-indicator {
-            font-style: italic;
-            color: #777;
-            text-align: center;
-            font-size: 1.1em;
-        }
+    .input-container button:hover {
+      background-color: #666;
+    }
 
-        .settings-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #0078D4;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            padding: 20px;
-            font-size: 1.5em;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease;
-        }
+    .settings-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 999;
+    }
 
-        .settings-btn:hover {
-            background-color: #005A9C;
-        }
+    .popup, .overlay {
+      display: none;
+    }
 
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            width: 350px;
-            transition: opacity 0.3s ease;
-        }
+    .popup.active, .overlay.active {
+      display: block;
+    }
 
-        .popup .popup-header {
-            text-align: center;
-            color: #0078D4;
-            font-size: 1.6em;
-            margin-bottom: 20px;
-        }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 998;
+    }
 
-        .popup .popup-content {
-            display: flex;
-            flex-direction: column;
-        }
+    .popup {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      z-index: 999;
+      width: 320px;
+      color: #fff;
+    }
 
-        .popup .popup-content label {
-            color: #555;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
+    .popup h3 {
+      margin-bottom: 20px;
+    }
 
-        .popup .popup-content input[type="color"] {
-            height: 40px;
-            width: 100px;
-            margin-bottom: 20px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .popup label {
+      display: block;
+      margin-bottom: 10px;
+    }
 
-        .popup .popup-footer {
-            display: flex;
-            justify-content: space-evenly;
-        }
+    .popup input[type="color"],
+    .popup select {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 20px;
+      border: none;
+      background: #111;
+      color: #fff;
+      padding: 5px;
+      border-radius: 8px;
+    }
 
-        .popup .popup-footer button {
-            background-color: #0078D4;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .popup button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 45%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-        .popup .popup-footer button:hover {
-            background-color: #005A9C;
-        }
+    .popup .apply-btn {
+      background: #444;
+      color: white;
+    }
 
-        /* Overlay (Background when popup is open) */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-    </style>
+    .popup .cancel-btn {
+      background: #666;
+      color: white;
+      float: right;
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="header">
-            Aayan's GPT
-        </div>
-        <div class="messages" id="messages"></div>
-        <div class="input-container">
-            <input type="text" id="userInput" placeholder="Type your message..." />
-            <button onclick="sendMessage()">Send</button>
-        </div>
+
+  <div class="chat-container" id="chatContainer">
+    <div class="header" id="chatHeader">Aayan's GPT</div>
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
     </div>
+  </div>
 
-    <button class="settings-btn" onclick="openSettings()">⚙️</button>
+  <!-- Settings Button -->
+  <button class="settings-btn" onclick="openSettings()">⚙️</button>
 
-    <!-- Overlay -->
-    <div class="overlay" id="overlay" onclick="closeSettings()"></div>
+  <!-- Overlay and Settings Popup -->
+  <div class="overlay" id="overlay" onclick="closeSettings()"></div>
 
-    <!-- Pop-up Settings -->
-    <div class="popup" id="settingsPopup">
-        <div class="popup-header">Customize Colors</div>
-        <div class="popup-content">
-            <label for="bgColor">Background:</label>
-            <input type="color" id="bgColor" value="#ffffff">
+  <div class="popup" id="popup">
+    <h3>Customize Chat</h3>
 
-            <label for="textColor">Text:</label>
-            <input type="color" id="textColor" value="#333333">
+    <label for="bgColor">Background Color:</label>
+    <input type="color" id="bgColor" value="#1a1a1a">
 
-            <label for="buttonColor">Button:</label>
-            <input type="color" id="buttonColor" value="#0078D4">
-        </div>
-        <div class="popup-footer">
-            <button onclick="applyChanges()">Apply</button>
-            <button onclick="closeSettings()">Cancel</button>
-        </div>
+    <label for="textColor">Text Color:</label>
+    <input type="color" id="textColor" value="#ffffff">
+
+    <label for="buttonColor">Button Color:</label>
+    <input type="color" id="buttonColor" value="#444444">
+
+    <label for="fontSelect">Font Style:</label>
+    <select id="fontSelect">
+      <option value="'Roboto', sans-serif">Roboto</option>
+      <option value="'Inter', sans-serif">Inter</option>
+      <option value="'Courier Prime', monospace">Courier Prime</option>
+      <option value="'Merriweather', serif">Merriweather</option>
+      <option value="Arial, sans-serif">Arial</option>
+      <option value="Georgia, serif">Georgia</option>
+    </select>
+
+    <div style="display: flex; justify-content: space-between;">
+      <button class="apply-btn" onclick="applyChanges()">Apply</button>
+      <button class="cancel-btn" onclick="closeSettings()">Cancel</button>
     </div>
+  </div>
 
-    <script>
-        const API_KEY = 'YOUR_OPENAI_API_KEY'; // Replace with your OpenAI API key
-        const messagesContainer = document.getElementById('messages');
-        const settingsPopup = document.getElementById('settingsPopup');
-        const overlay = document.getElementById('overlay');
+  <script>
+    const messagesDiv = document.getElementById('messages');
 
-        // Function to add a message to the chat container
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(sender === 'bot' ? 'bot' : 'user');
-            messageDiv.textContent = text;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to the bottom
-        }
+    function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
 
-        // Function to show the typing indicator
-        function showTypingIndicator() {
-            const typingIndicator = document.createElement('div');
-            typingIndicator.classList.add('typing-indicator');
-            typingIndicator.textContent = 'Aayan\'s GPT is typing...';
-            messagesContainer.appendChild(typingIndicator);
-            return typingIndicator;
-        }
+      addMessage(text, 'user');
+      input.value = '';
 
-        // Function to send a message to ChatGPT
-        async function sendMessage() {
-            const userInput = document.getElementById('userInput').value;
-            if (userInput.trim() === '') return; // Do not send empty messages
+      // Simulated bot reply
+      setTimeout(() => {
+        addMessage("Aayan's GPT says: " + text, 'bot');
+      }, 600);
+    }
 
-            // Display the user's message
-            addMessage(userInput, 'user');
-            document.getElementById('userInput').value = ''; // Clear the input field
+    function addMessage(msg, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message', sender);
+      msgDiv.textContent = msg;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
 
-            // Show typing indicator
-            const typingIndicator = showTypingIndicator();
+    function openSettings() {
+      document.getElementById('popup').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
 
-            // Fetch the response from OpenAI's GPT-3 model
-            try {
-                const response = await fetch('https://api.openai.com/v1/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        model: 'text-davinci-003',  // You can use other models like GPT-4 if needed
-                        prompt: userInput,
-                        max_tokens: 150,
-                        temperature: 0.7,
-                    }),
-                });
+    function closeSettings() {
+      document.getElementById('popup').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+    }
 
-                const data = await response.json();
-                const botReply = data.choices[0].text.trim();
-                addMessage(botReply, 'bot
+    function applyChanges() {
+      const bgColor = document.getElementById('bgColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const buttonColor = document.getElementById('buttonColor').value;
+      const fontFamily = document.getElementById('fontSelect').value;
+
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.style.backgroundColor = bgColor;
+      chatContainer.style.color = textColor;
+      chatContainer.style.fontFamily = fontFamily;
+
+      document.querySelector('.messages').style.color = textColor;
+      document.querySelector('.input-container button').style.backgroundColor = buttonColor;
+      document.querySelector('.input-container').style.fontFamily = fontFamily;
+      document.getElementById('chatHeader').style.fontFamily = fontFamily;
+
+      closeSettings();
+    }
+  </script>
+
+</body>
+</html>
